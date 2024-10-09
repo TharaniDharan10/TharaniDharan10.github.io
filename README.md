@@ -42,7 +42,8 @@ I am an aspiring Full Stack Developer currently pursuing a Bachelor of Technolog
 ## 🚀 **Projects**  
 
 ### 🖥 **Spring Boot LMS Project**  
-- Developed a comprehensive **Learning Management System (LMS)** using **Spring Boot**, enabling efficient management of student courses, assignments, and grading.  
+- Developed a comprehensive **Library Management System (LMS)** using **Spring Boot**,This system provides functionalities such as book management, user management, and borrowing/returning records.
+- **Technologies**: Java, Spring Boot, MySQL, REST APIs   
 - Implemented REST APIs for user authentication and course content management, integrated with a **MySQL database** for data storage.  
 - Applied **Spring Security** for role-based access control to secure sensitive data and operations.
 
