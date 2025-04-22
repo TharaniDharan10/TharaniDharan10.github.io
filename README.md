@@ -1,6 +1,6 @@
 # **Tharani Dharan Saravanan**  
 🌟 *Aspiring Full Stack Developer | Tech Enthusiast | CSE Student at LPU*  
-📧 TharaniDharan.S@outlook.com | 📞 +91 93456 08391 | [LinkedIn](https://www.linkedin.com/in/tharanidharan-s)  
+📧 TharaniDharan.S@outlook.com | [LinkedIn](https://www.linkedin.com/in/tharanidharan-s)  
 📍 Jalandhar, Punjab, India  
 
 ---
