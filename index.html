@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tharani Dharan Saravanan — Data Engineer</title>
+<meta name="description" content="Tharani Dharan Saravanan — Data Engineer, aspiring Full Stack & DevOps Engineer. Interactive terminal portfolio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e14;
+    --bg-panel:#10151d;
+    --bg-panel-2:#141b25;
+    --border:#212a36;
+    --border-soft:#1a212b;
+    --text:#cdd8e3;
+    --text-dim:#5c6b7a;
+    --cyan:#2dd4e8;
+    --violet:#b3a1fb;
+    --pink:#f472b6;
+    --green:#4ade80;
+    --amber:#fbbf24;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'JetBrains Mono', ui-monospace, monospace;
+    min-height:100vh;
+    padding:56px 20px 40px;
+    position:relative;
+    overflow-x:hidden;
+    line-height:1.55;
+  }
+
+  canvas#rain{
+    position:fixed; inset:0; width:100%; height:100%;
+    pointer-events:none; z-index:0; opacity:0;
+    transition:opacity .5s ease;
+  }
+  canvas#rain.on{opacity:.5;}
+
+  .wrap{max-width:920px; margin:0 auto; position:relative; z-index:1;}
+
+  /* ---------- hero ---------- */
+  .hero{text-align:center; margin-bottom:44px;}
+  .wordmark-svg{width:100%; max-width:520px; height:auto; margin:0 auto; display:block;}
+  .wordmark-svg text{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:800;
+    font-size:112px;
+    letter-spacing:6px;
+    fill:none;
+    stroke:var(--cyan);
+    stroke-width:2.25;
+    stroke-dasharray:7 5;
+  }
+  .tagline{
+    color:var(--text-dim);
+    font-size:14px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    margin-top:14px;
+  }
+  .tagline b{color:var(--violet); font-weight:600;}
+  .tagline .sep{color:var(--border);}
+
+  /* ---------- terminal ---------- */
+  .term{
+    background:var(--bg-panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    box-shadow:0 30px 60px -30px rgba(0,0,0,.7);
+    overflow:hidden;
+  }
+  .term-bar{
+    display:flex; align-items:center; gap:8px;
+    padding:12px 16px;
+    background:var(--bg-panel-2);
+    border-bottom:1px solid var(--border);
+  }
+  .dot{width:12px; height:12px; border-radius:50%;}
+  .dot.r{background:#ff5f56;}
+  .dot.y{background:#ffbd2e;}
+  .dot.g{background:#27c93f;}
+  .term-title{
+    flex:1; text-align:center;
+    color:var(--text-dim); font-size:12.5px;
+    letter-spacing:.03em;
+  }
+  .term-body{
+    padding:22px 20px 18px;
+    font-size:14.5px;
+    min-height:340px;
+    max-height:520px;
+    overflow-y:auto;
+  }
+  .term-body::-webkit-scrollbar{width:8px;}
+  .term-body::-webkit-scrollbar-thumb{background:var(--border); border-radius:4px;}
+
+  .line{white-space:pre-wrap; word-break:break-word;}
+  .prompt{color:var(--green);}
+  .path{color:var(--cyan);}
+  .cmd-echo{color:var(--text);}
+  .out{color:var(--text); margin:2px 0 14px;}
+  .dim{color:var(--text-dim);}
+  .accent{color:var(--cyan);}
+  .accent2{color:var(--violet);}
+  .accent3{color:var(--pink);}
+  .warn{color:var(--amber);}
+
+  .stats-row{display:flex; flex-wrap:wrap; gap:10px; margin:8px 0 16px;}
+  .stat-card{
+    flex:1; min-width:130px;
+    background:var(--bg-panel-2);
+    border:1px solid var(--border-soft);
+    border-radius:8px;
+    padding:12px 14px;
+  }
+  .stat-card .num{font-size:20px; font-weight:700; color:var(--cyan);}
+  .stat-card .lab{font-size:10.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.08em; margin-top:2px;}
+
+  .proj{margin-bottom:14px;}
+  .proj .name{color:var(--cyan); font-weight:600;}
+  .proj .stack{color:var(--violet); font-size:12.5px;}
+  .proj .desc{color:var(--text-dim); font-size:13px; margin-top:2px;}
+  .proj a{color:var(--pink); text-decoration:none;}
+  .proj a:hover{text-decoration:underline;}
+
+  .input-row{
+    display:flex; align-items:center; gap:8px;
+    padding:12px 20px 16px;
+    border-top:1px solid var(--border-soft);
+  }
+  .input-row .prompt{white-space:nowrap;}
+  #cmd-input{
+    flex:1; background:transparent; border:none; outline:none;
+    color:var(--text); font-family:inherit; font-size:14.5px;
+  }
+  .cursor{
+    display:inline-block; width:8px; height:16px;
+    background:var(--cyan); vertical-align:middle;
+    animation:blink 1s step-end infinite;
+  }
+  @keyframes blink{50%{opacity:0;}}
+
+  /* ---------- footer ---------- */
+  .hint{
+    text-align:center; color:var(--text-dim);
+    font-size:12px; margin-top:22px;
+  }
+  .hint code{color:var(--violet); background:var(--bg-panel-2); padding:1px 6px; border-radius:4px;}
+
+  .links{text-align:center; margin-top:22px; font-size:13.5px;}
+  .links a{color:var(--cyan); text-decoration:none; margin:0 10px;}
+  .links a:hover{text-decoration:underline; color:var(--pink);}
+  .links .sep{color:var(--border);}
+
+  .foot-note{text-align:center; color:var(--text-dim); font-size:11px; margin-top:14px;}
+
+  @media (max-width:560px){
+    .term-body{font-size:13px;}
+    .stats-row{gap:8px;}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="rain"></canvas>
+
+<div class="wrap">
+
+  <div class="hero">
+    <svg class="wordmark-svg" viewBox="0 0 520 140" xmlns="http://www.w3.org/2000/svg">
+      <text x="50%" y="98" text-anchor="middle">TD</text>
+    </svg>
+    <div class="tagline">
+      Data Engineer <span class="sep">·</span> <b>Aspiring</b> Full Stack Developer <span class="sep">·</span> <b>Aspiring</b> DevOps Engineer
+    </div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar">
+      <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+      <span class="term-title">tharani@github: ~</span>
+    </div>
+    <div class="term-body" id="term-body"></div>
+    <div class="input-row">
+      <span class="prompt">tharani@github:~$</span>
+      <input id="cmd-input" autocomplete="off" spellcheck="false" autofocus />
+      <span class="cursor" id="fake-cursor"></span>
+    </div>
+  </div>
+
+  <div class="hint">type <code>help</code> to see available commands · try <code>projects</code>, <code>contributions</code>, or <code>matrix</code></div>
+
+  <div class="links">
+    <a href="https://tharaniportfolio.netlify.app/" target="_blank" rel="noopener">portfolio</a><span class="sep">·</span>
+    <a href="https://github.com/TharaniDharan10" target="_blank" rel="noopener">github</a><span class="sep">·</span>
+    <a href="https://www.linkedin.com/in/tharanidharan-s/" target="_blank" rel="noopener">linkedin</a><span class="sep">·</span>
+    <a href="mailto:dharunjisnu109@gmail.com">email</a>
+  </div>
+  <div class="foot-note">rendered client-side · contribution stats update automatically from GitHub</div>
+
+</div>
+
+<script>
+const USERNAME = "TharaniDharan10";
+const body = document.getElementById('term-body');
+const input = document.getElementById('cmd-input');
+
+function println(html, cls){
+  const div = document.createElement('div');
+  div.className = 'line ' + (cls||'out');
+  div.innerHTML = html;
+  body.appendChild(div);
+  body.scrollTop = body.scrollHeight;
+}
+
+function printCmd(cmd){
+  println(`<span class="prompt">tharani@github:~$</span> <span class="cmd-echo">${cmd}</span>`, 'line');
+}
+
+const commands = {
+  help(){
+    println(`Available commands:
+  <span class="accent">whoami</span>          — who I am
+  <span class="accent">projects</span>        — featured work
+  <span class="accent">skills</span>          — tech stack
+  <span class="accent">contributions</span>   — live GitHub stats
+  <span class="accent">certifications</span>  — credentials
+  <span class="accent">contact</span>         — get in touch
+  <span class="accent">matrix</span>          — ¯\\_(ツ)_/¯
+  <span class="accent">clear</span>           — clear the screen`);
+  },
+
+  whoami(){
+    println(`<span class="accent2">Tharani Dharan Saravanan</span>
+Data Engineer · Aspiring Full Stack Developer & DevOps Engineer
+
+B.Tech in Computer Science and Engineering
+Lovely Professional University · 2022 – 2026 (Graduated)
+
+Currently: <span class="accent">Data Engineer, Full-Time</span>
+  Building scalable, cloud-native data architectures across
+  BigQuery & Snowflake, orchestrated with Apache Airflow.
+
+Training: DSA Intern @ Sure Trust (Dec 2024 – Jul 2025)
+
+Also sharpening: React front-ends, Spring Boot microservices,
+Docker/Kubernetes deployments, and infrastructure-as-code.
+
+Languages: Tamil (native) · English (fluent) · Hindi (fluent)
+Fun fact: balances debugging sessions with basketball & badminton 🏀🏸`);
+  },
+
+  projects(){
+    const list = [
+      ["E-Wallet Microservices System","Spring Boot · MySQL · Kafka · Gradle-Kotlin",
+       "Microservices e-wallet platform with real-time transaction notifications via Kafka, split across User/Wallet/Transaction/Notification services.",
+       "https://github.com/TharaniDharan10/E_Wallet"],
+      ["LangChain LLM & RAG Learning Project","LangChain · Gemini · Chroma · RAG · Agents",
+       "Chapter-by-chapter GenAI build: embeddings, a full RAG pipeline, and ReAct tool-using agents with conversational memory.",
+       "https://github.com/TharaniDharan10/Langchain_Demo"],
+      ["dbt + Databricks Medallion Pipeline","dbt-core · Databricks · Snowflake/BigQuery-style",
+       "Bronze → Silver → Gold pipeline with SCD Type 2 snapshots and a dev → prod promotion workflow.",
+       "https://github.com/TharaniDharan10/DBT_Core_Demo"],
+      ["Docker + Kubernetes + Terraform CI/CD","Spring Boot · Docker · EKS · Terraform · GH Actions",
+       "Spring Boot REST API containerized and deployed to AWS EKS via a fully automated, Terraform-provisioned CI/CD pipeline.",
+       "https://github.com/TharaniDharan10/Docker_Demo"],
+      ["Spring Boot Library Management System","Spring Boot · MySQL · Redis · Maven",
+       "Monolithic LMS with JPA persistence, Redis caching, and Spring Security authentication.",
+       "https://github.com/TharaniDharan10/Library_Management_System"],
+      ["Tinder AI Chat App","Spring Boot · MongoDB · Llama · React · Maven",
+       "AI-powered dating app with gender-specific Llama personas, real-time chat and swipe mechanics.",
+       "https://github.com/TharaniDharan10/Tinder_AI"],
+    ];
+    let html = '';
+    list.forEach(([name,stack,desc,link])=>{
+      html += `<div class="proj">
+        <div class="name">${name}</div>
+        <div class="stack">${stack}</div>
+        <div class="desc">${desc}</div>
+        <a href="${link}" target="_blank" rel="noopener">→ view repo</a>
+      </div>`;
+    });
+    println(html);
+  },
+
+  skills(){
+    println(`<span class="accent">Languages</span>       Java · Python · JavaScript · HTML5 · CSS3
+<span class="accent">Frameworks</span>      React · Tailwind CSS · Spring Boot · Django
+<span class="accent">Databases</span>       MySQL · MongoDB · Redis
+<span class="accent">Data Eng</span>        Snowflake · BigQuery · Airflow · dbt · Kafka · GCP
+<span class="accent">DevOps</span>          Docker · Kubernetes · AWS · Terraform · GH Actions · Prometheus · Grafana · Nginx
+<span class="accent">AI / LLM</span>        LangChain · Ollama
+<span class="accent">Tools</span>           Figma · Postman · VS Code · IntelliJ IDEA`);
+  },
+
+  certifications(){
+    println(`<span class="accent2">Associate Cloud Engineer</span> — Google Cloud (Apr 2026)
+<span class="accent2">Cloud Infra 2025 Certified Developer Professional</span> — Oracle (Oct 2025)
+<span class="accent2">Cloud Infra 2025 Certified Architect Associate</span> — Oracle (Oct 2025)
+<span class="accent2">Solutions Architecture</span> — AWS via Forage (Jul 2025)
+<span class="accent2">Cloud Computing</span> — NPTEL (Oct 2024)
+<span class="accent2">Java Backend Development</span> — GeeksforGeeks (Sep 2024)
+<span class="accent2">Agile Job Simulation</span> — JPMorgan Chase & Co via Forage (Aug 2024)
+<span class="accent2">Introduction to Web Development</span> — IBM / Coursera (Apr 2024)`);
+  },
+
+  contact(){
+    println(`<span class="accent">Email</span>      dharunjisnu109@gmail.com
+<span class="accent">Portfolio</span>  https://tharaniportfolio.netlify.app/
+<span class="accent">LinkedIn</span>   https://www.linkedin.com/in/tharanidharan-s/
+<span class="accent">GitHub</span>     https://github.com/TharaniDharan10
+
+Open to full-stack, backend, and data engineering opportunities. 🚀`);
+  },
+
+  contributions(){
+    println(`<span class="dim">fetching live GitHub stats for ${USERNAME}...</span>`);
+    println(`<img src="https://ghchart.rshah.org/2dd4e8/${USERNAME}" alt="GitHub contribution graph" style="max-width:100%; border-radius:6px; margin:6px 0 14px; display:block;">
+<img src="https://streak-stats.demolab.com/?user=${USERNAME}&theme=dark&background=10151d&stroke=232b36&ring=2dd4e8&fire=2dd4e8&currStreakLabel=2dd4e8&border=232b36" alt="Streak stats" style="max-width:100%; margin-bottom:6px;">
+<span class="dim">graphs pull live from github.com/${USERNAME} — no manual refresh needed</span>`);
+  },
+
+  matrix(){
+    toggleRain();
+    println(`<span class="warn">matrix mode ${rainOn ? 'engaged' : 'disengaged'}.</span> type <span class="accent">matrix</span> again to toggle.`);
+  },
+
+  clear(){
+    body.innerHTML = '';
+  }
+};
+
+function runCommand(raw){
+  const cmd = raw.trim();
+  if(!cmd) return;
+  printCmd(cmd);
+  const fn = commands[cmd.toLowerCase()];
+  if(fn){ fn(); }
+  else{ println(`command not found: <span class="warn">${cmd}</span> — type <span class="accent">help</span> for a list`); }
+}
+
+input.addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){
+    const v = input.value;
+    input.value = '';
+    runCommand(v);
+  }
+});
+
+document.addEventListener('click', ()=> input.focus());
+
+// boot sequence
+println(`<span class="accent">connected to github.com/${USERNAME}</span>
+type <span class="accent">help</span> to see available commands`);
+setTimeout(()=> runCommand('whoami'), 400);
+
+/* ---------------- matrix rain ---------------- */
+const canvas = document.getElementById('rain');
+const ctx = canvas.getContext('2d');
+let rainOn = false, rainFrame;
+const chars = "01アイウエオカキクケコサシスセソ";
+
+function resizeCanvas(){
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+let drops = [];
+function initDrops(){
+  const fontSize = 16;
+  const cols = Math.floor(canvas.width / fontSize);
+  drops = Array(cols).fill(1);
+}
+
+function drawRain(){
+  const fontSize = 16;
+  ctx.fillStyle = 'rgba(10,14,20,0.08)';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = '#2dd4e8';
+  ctx.font = fontSize + 'px monospace';
+  drops.forEach((y,i)=>{
+    const text = chars[Math.floor(Math.random()*chars.length)];
+    ctx.fillText(text, i*fontSize, y*fontSize);
+    if(y*fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+    drops[i] = y + 1;
+  });
+  rainFrame = requestAnimationFrame(drawRain);
+}
+
+function toggleRain(){
+  rainOn = !rainOn;
+  if(rainOn){
+    initDrops();
+    canvas.classList.add('on');
+    drawRain();
+  } else {
+    canvas.classList.remove('on');
+    cancelAnimationFrame(rainFrame);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+}
+</script>
+</body>
+</html>
